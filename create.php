@@ -1,10 +1,25 @@
 <?php
+// var_dump($_SERVER);
+// die();
 // Si les données arrivent au serveur via la méthode "POST",
-// Un peu de cyber Sécurité
+if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
+// Un peu de cyber Sécurité
+$name = $_POST['name'];
+// $name = htmlspecialchars($name);
+// $name = htmlentities($name);
+// $name = strip_tags($name);
+// echo $name;
+// die();
+    
 
 // Protection contre les failles de types XSS pour éviter les injections de scripts malveillant
-
+$post_clean = [];
+foreach ($_POST as $key => $value){
+    
+    $post_clean[$key] = htmlspecialchars(trim(addslashes($value)));
+}
+echo $post_clean["name"];
 
 // Protection contre les failles de types CSRF
 
@@ -29,9 +44,10 @@
 // Effectuer une redirection vers la page d'accueil
 
 // Arrêter l'éxecution du script
+}
 ?>
 
- <!-- Chargement de l'entête ainsi que la balise ouvrante du body -->
+<!-- Chargement de l'entête ainsi que la balise ouvrante du body -->
 <?php require __DIR__ . "/components/head.php"; ?>
 
 <!-- Chargement de la barre de navigation -->
