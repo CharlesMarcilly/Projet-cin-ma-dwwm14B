@@ -1,4 +1,6 @@
 <?php 
+session_start();
+
 //  Définition du titre spécifique à la page -->
     $title = "Page d'accueil"; 
     ?>
@@ -14,6 +16,18 @@
     <main class="container">
         <h1 class="text-center my-3 display-5">Liste des films</h1>
     
+        <?php if(isset($_SESSION['success']) && !empty($_SESSION['success'])) : ?>
+            <div class="alert alert-success" role="alert">
+                <?= $_SESSION['success']?>
+            </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?= $_SESSION["success"]?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset ($_SESSION['success']); ?>
+        <?php endif ?>
+
+
         <div class="d-flex justify-content-end align-items-center">
             <a href="create.php" class="btn btn-primary">Nouveau film</a>
         </div>
