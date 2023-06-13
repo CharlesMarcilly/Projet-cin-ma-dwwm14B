@@ -1,13 +1,13 @@
 * {
   font-family: "Poppins", sans-serif;
-  font-family: "Pacifico", cursive;
 }
 
 :root {
   --dark-color: rgba(0, 0, 0, 0.15);
 }
-/* ---------------------------------- */
-/* Classes réutilisable */
+
+/* -------------------------------------------------------------------------------- */
+/* Classes réutilisables */
 .my-shadow {
   box-shadow: 0 -0.5rem 1rem var(--dark-color);
 }
@@ -16,7 +16,7 @@
   font-size: 1.15rem;
 }
 
-/* ---------------------------------- */
+/* -------------------------------------------------------------------------------- */
 html,
 body {
   height: 100%;
@@ -30,4 +30,27 @@ body {
 nav a,
 footer p {
   font-family: "Pacifico", cursive;
+}
+
+.card {
+  width: 100%;
+  border-radius: 20px;
+  transition: 1s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  transition: 1s;
+}
+
+@media screen and (min-width: 768px) {
+  .card {
+    width: 60%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .card {
+    width: 40%;
+  }
 }

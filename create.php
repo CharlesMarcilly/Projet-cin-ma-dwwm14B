@@ -116,39 +116,36 @@ session_start();
             // Arrêt de l'exécution du script.
             return header("Location: $_SERVER[HTTP_REFERER]");
         }
-
+        
         
         // Dans le cas contraire,
-        if(isset($post_clean['review']) && !empty($post_clean['review']))
+        if ( isset($post_clean['review']) && !empty($post_clean['review']) ) 
         {
-            $review_rounded = round($post_clean['review'],1);
+            $review_rounded = round($post_clean['review'], 1);
         }
 
         // Etablir une connexion avec la base de données
         require __DIR__ . "/db/connexion.php";
-
-
+        
         // Effectuer une requête d'insertion des données dans la table "film"
-        $req = $db->prepare("INSERT INTO film (name, actors, review, comment, created_at, updated_at) VALUES (:name, :actors, :review, :comment, now(), now() )" );
+        $req = $db->prepare("INSERT INTO film (name, actors, review, comment, created_at, updated_at) VALUES (:name, :actors, :review, :comment, now(), now() ) ");
 
-        $req->bindValue(":name",   $post_clean['name']);
-        $req->bindValue(":actors", $post_clean['actors']);
-        $req->bindValue(":review", isset($review_rounded) ? $review_rounded : "");
-        $req->bindValue(":comment",   $post_clean['comment']);
+        $req->bindValue(":name",    $post_clean['name']);
+        $req->bindValue(":actors",  $post_clean['actors']);
+        $req->bindValue(":review",  isset($review_rounded) ? $review_rounded : '' );
+        $req->bindValue(":comment", $post_clean['comment']);
 
         $req->execute();
 
-        // Ferme la connexion avec le serveur. N'est pas obligatoire
+        // Non obligatoire
         $req->closeCursor();
 
-
         // Générons un message flash de succès
-        $_SESSION['success'] = "'<em>$post_clean[name]</em>' a été ajouté à la liste avec succès !";
-
-        // Effectuer une redirection vers la page d'accueil
-        return header("location: index.php");
+        $_SESSION['success'] = "<em>" . stripslashes($post_clean['name']) . "</em> a été ajouté à la liste avec succès.";
         
+        // Effectuer une redirection vers la page d'accueil
         // Arrêter l'exécution du script
+        return header("Location: index.php");
     }
 
     $_SESSION['csrf_token'] = bin2hex(random_bytes(30));
@@ -182,19 +179,19 @@ session_start();
                     <form method="post">
                         <div class="mb-3">
                             <label for="name">Le nom du film <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="name" class="form-control" autofocus maxlength="255" value="<?= $_SESSION['old']['name'] ?? ''; unset($_SESSION['old']['name']); ?>">
+                            <input type="text" name="name" id="name" class="form-control" autofocus maxlength="255" value="<?= (isset($_SESSION['old']['name']) && !empty($_SESSION['old']['name'])) ? stripslashes($_SESSION['old']['name']) : ''; unset($_SESSION['old']['name']); ?>">
                         </div>
                         <div class="mb-3">
                             <label for="actors">Le nom du/des acteur(s) <span class="text-danger">*</span></label>
-                            <input type="text" name="actors" id="actors" class="form-control" maxlength="255" value="<?= $_SESSION['old']['actors'] ?? ''; unset($_SESSION['old']['actors']); ?>">
+                            <input type="text" name="actors" id="actors" class="form-control" maxlength="255" value="<?= (isset($_SESSION['old']['actors']) && !empty($_SESSION['old']['actors'])) ? stripslashes($_SESSION['old']['actors']) : ''; unset($_SESSION['old']['actors']); ?>">
                         </div>
                         <div class="mb-3">
                             <label for="review">La note / 5</label>
-                            <input type="number" name="review" id="review" step=".1" min="0" max="5" class="form-control" value="<?= $_SESSION['old']['review'] ?? ''; unset($_SESSION['old']['review']); ?>">
+                            <input type="number" name="review" id="review" step=".1" min="0" max="5" class="form-control" value="<?= (isset($_SESSION['old']['review']) && !empty($_SESSION['old']['review'])) ? stripslashes($_SESSION['old']['review']) : ''; unset($_SESSION['old']['review']); ?>">
                         </div>
                         <div class="mb-3">
                             <label for="comment">Un commentaire ?</label>
-                            <textarea name="comment" id="comment" class="form-control" rows="4"><?= $_SESSION['old']['comment'] ?? ''; unset($_SESSION['old']['comment']); ?></textarea>
+                            <textarea name="comment" id="comment" class="form-control" rows="4"><?= (isset($_SESSION['old']['comment']) && !empty($_SESSION['old']['comment'])) ? stripslashes($_SESSION['old']['comment']) : ''; unset($_SESSION['old']['comment']); ?></textarea>
                         </div>
                         <div class="mb-3">
                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
